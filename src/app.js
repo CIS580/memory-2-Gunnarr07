@@ -14,16 +14,51 @@ var cards = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8];
 var board = [];
 while(cards.length > 0) {
   var index = Math.floor(Math.random() * (cards.length - 1));
-  board.push({card: cards[index], flip: true});
+  board.push({card: cards[index], flip: false});
   cards.splice(index, 1);
 }
+var state = "waiting for click 1";
+var scores = [0,0];
+var player = 0;
+var card1, card2;
+
 console.log(board);
 
 // TODO: Place the cards on the board in random order
 
 canvas.onclick = function(event) {
   event.preventDefault();
-  // TODO: determine which card was clicked on
+    // TODO: determine which card was clicked on
+    var x = Math.floor((event.clientX - 3) / 165);
+    var y = Math.floor((event.clientY - 3) / 165);
+    var card = board[y * 6 + x];
+    // If card not undefind or not flip
+    if(!card || card.flip) return;
+    card.flip = true;
+    switch (state) {
+      case "waiting for click 1":
+        card1 = card;
+        state = "waiting for click 2";
+        break;
+      case "waiting for click 2":
+        card2 = card;
+        state = "wating for timer";
+        setTimeout(fucntion(){
+          if(card1.card == card2.card) {
+            scores[player]++;
+          }
+          else {
+            card1.flip = false;
+            card2.flip = false;
+            player = +!player;
+            state = "waiting for click 1"
+          }
+          state = "waiting for click 1";
+        }, 3000);
+
+        break;
+    }
+
   // TODO: determine what to do
 }
 
