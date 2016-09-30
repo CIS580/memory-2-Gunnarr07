@@ -13,6 +13,13 @@ var game = new Game(canvas, update, render);
 var image = new Image();
 image.src = 'assets/animals.png';
 
+var blip = new Audio();
+blip.src = '';
+var flip = new Audio();
+flip.src = '';
+var pair = new Audio();
+pair.src = '';
+
 // We have 9 pairs of possible cards that are about 212px square
 var cards = [0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8];
 var board = [];
@@ -41,10 +48,14 @@ canvas.onclick = function(event) {
     card.flip = true;
     switch (state) {
       case "waiting for click 1":
+        if(!board[currentIndex] || board[currentIndex].flip) return blip.play();
+        //board[currentIndex].flip = true;
+        flip.play();
         card1 = card;
         state = "waiting for click 2";
         break;
       case "waiting for click 2":
+        if(!board[currentIndex] || board[currentIndex].flip) return blip.play();
         card2 = card;
         state = "wating for timer";
         setTimeout(function(){
@@ -66,12 +77,18 @@ canvas.onclick = function(event) {
   // TODO: determine what to do
 }
 
+canvas.oncontextmenu = function(event) {
+  event.preventDefault();
+  alert('foo');
+}
+
 var currentIndex, currentX, currentY;
 canvas.onmousemove = function(event) {
   event.preventDefault();
   currentX = event.offsetX;
   currentY = event.offsetY;
   var x = Math.floor((currentX + 3));
+  var y = Math.floor((currentY + 3));
 }
 
 /**
