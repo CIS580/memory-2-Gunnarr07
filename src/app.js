@@ -1,5 +1,8 @@
 "use strict";
 
+//const debug = true;
+window.debug = true;
+
 /* Classes */
 const Game = require('./game');
 
@@ -43,7 +46,7 @@ canvas.onclick = function(event) {
       case "waiting for click 2":
         card2 = card;
         state = "wating for timer";
-        setTimeout(fucntion(){
+        setTimeout(function(){
           if(card1.card == card2.card) {
             scores[player]++;
           }
@@ -60,6 +63,14 @@ canvas.onclick = function(event) {
     }
 
   // TODO: determine what to do
+}
+
+var currentIndex, currentX, currentY;
+canvas.onmousemove = function(event) {
+  event.preventDefault();
+  currentX = event.offsetX;
+  currentY = event.offsetY;
+  var x = Math.floor((currentX + 3));
 }
 
 /**
@@ -115,6 +126,17 @@ function render(elapsedTime, ctx) {
         ctx.fillRect(x * 165 + 3, y * 165 + 3, 160, 160);
       }
     }
+  }
+
+  if(debug){
+    var x = currentIndex % 6;
+    var y = Math.floor(currentIndex / 6);
+
+    ctx.fillStyle = "#ff0000";
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 3, 0, 2*Math.PI);
+    ctx.rect(x * 165 + 3, y * 165 + 3, 163, 163);
+    ctx.stroke();
   }
 
 }
